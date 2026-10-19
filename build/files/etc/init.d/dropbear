@@ -1,0 +1,52 @@
+#!/bin/sh /etc/rc.common
+# Patched dropbear init script.
+# See docs/SSH-DEBUGGING.md for why every single line of start()/keygen()
+# below exists. Short version: this build has no DSS support so the stock
+# script's "generate RSA+DSS before starting" keygen never completes; UCI
+# config for this service doesn't reliably reach the rootfs on this device
+# so config_foreach never actually launches the daemon; and -L is an
+# undocumented TP-Link flag required for shell/PTY access after auth.
+
+START=50
+STOP=50
+USE_PROCD=0
+NAME=dropbear
+PROG=/usr/sbin/dropbear
+
+keygen()
+{
+	KEYFILE=/etc/dropbear/dropbear_rsa_host_key
+	[ -s "$KEYFILE" ] && return 0
+
+	mkdir -p /etc/dropbear 2>/dev/null
+	rm -f "$KEYFILE" 2>/dev/null
+	if /usr/bin/dropbearkey -t rsa -s 2048 -f "$KEYFILE" >/dev/null 2>&1 && [ -s "$KEYFILE" ]; then
+		chmod 0600 "$KEYFILE" 2>/dev/null
+		return 0
+	fi
+
+	# /etc not writable (or something else went wrong) - fall back to /tmp
+	# so dropbear can still come up, just without a persistent host key.
+	KEYFILE=/tmp/dropbear/dropbear_rsa_host_key
+	mkdir -p /tmp/dropbear
+	[ -s "$KEYFILE" ] && return 0
+	rm -f "$KEYFILE"
+	/usr/bin/dropbearkey -t rsa -s 2048 -f "$KEYFILE" >/dev/null 2>&1 && [ -s "$KEYFILE" ]
+}
+
+start()
+{
+	keygen || return 1
+
+	# Deliberately bypassing config_foreach/UCI here - see the big comment
+	# in docs/SSH-DEBUGGING.md, bug #2. -L is bug #4, do not drop it, auth
+	# will succeed and then every shell/PTY request will be silently
+	# refused without it.
+	local pid_file="/var/run/${NAME}.1.pid"
+	SERVICE_PID_FILE="$pid_file" service_start ${PROG} -P "$pid_file" -r "${KEYFILE}" -p 22 -B -L
+}
+
+stop()
+{
+	service_stop ${PROG}
+}

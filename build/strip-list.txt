@@ -1,0 +1,66 @@
+# Paths relative to the rootfs root, one per line.
+# Removed outright — binaries, kernel modules, init scripts, configs.
+# See ../docs/README for what each of these actually is/does.
+
+usr/sbin/cloud_changeService
+usr/sbin/cloud_cleanFwInfo
+usr/sbin/cloud_download
+usr/sbin/cloud_genSrvFile
+usr/sbin/cloud_getDevToken
+usr/sbin/cloud_getFwList
+usr/sbin/cloud_https_bootreq
+usr/sbin/cloud_https_download
+usr/sbin/cloud_reconnect
+usr/sbin/cloud_status_check
+usr/sbin/cloud_trace_download
+usr/sbin/cloud_updateDst
+usr/sbin/cloud_updateTmSig
+usr/sbin/cloud_upgrade
+usr/bin/cloud-brd
+usr/bin/cloud-client
+usr/bin/cloud-https
+sbin/cloudupgrade
+usr/bin/tmpServer
+usr/bin/tddp
+usr/bin/pfclient
+sbin/tddp_hook_close_txbf
+sbin/tddp_hook_enable_testmode
+sbin/tddp_hook_erase_radio
+sbin/tddp_hook_setmac
+usr/sbin/domain_login
+usr/bin/wportalctrl
+usr/sbin/smart_home_report
+usr/sbin/smart_home_schedule
+usr/sbin/dut_auto_reboot
+usr/sbin/dut_auto_upgrade
+lib/modules/iplatform/domain_dns.ko
+lib/modules/iplatform/domain_libs.ko
+lib/modules/iplatform/domain_redirect.ko
+lib/modules/iplatform/domain_tip.ko
+lib/modules/iplatform/wportal.ko
+etc/init.d/cloud_brd
+etc/init.d/cloud_client
+etc/init.d/cloud_https
+etc/init.d/auto_upgrade
+etc/init.d/auto-reboot
+etc/init.d/domain_login
+etc/init.d/wportal
+etc/init.d/smart_home
+etc/init.d/tmpServer
+etc/hotplug.d/iface/99-wportal
+etc/hotplug.d/iface/98-cloud-brd
+etc/hotplug.d/iface/01-wportal
+etc/hotplug.d/iface/65-domain_login
+etc/hotplug.d/firewall/65-domain_login
+lib/wportal
+lib/domain_login
+etc/config/wportal
+etc/config/domain_login
+etc/config/auto_upgrade
+etc/config/autoreboot
+usr/lib/lua/luci/controller/domain_redirect.lua
+
+# NOTE: usr/bin/tdpServer is intentionally NOT on this list. Confusingly
+# named almost the same as tddp above, but it's actually the OneMesh
+# daemon, not the debug backdoor. Don't remove it unless you specifically
+# don't want OneMesh.

@@ -1,0 +1,10 @@
+config dropbear
+	option PasswordAuth 'on'
+	option RootPasswordAuth 'on'
+	option Port         '22'
+	option BannerFile   '/etc/banner'
+
+# Note: this file isn't actually read at startup on this device - see
+# docs/SSH-DEBUGGING.md bug #2. Keeping it here anyway for anyone poking
+# around who expects it to exist, and in case a future firmware revision
+# fixes whatever's broken with config_foreach here.
